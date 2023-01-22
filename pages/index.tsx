@@ -1,17 +1,8 @@
 import React from "react";
 import Head from "next/head";
-import {
-  Flex,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  useColorMode,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { VerifyTab } from "@/components/VerifyTab";
-import { ValidateTab } from "@/components/ValidateTab";
+import { useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { NavBar } from "@/components/NavBar";
+import { TabsView } from "@/components/TabsView";
 
 export default function Home() {
   const formBackground = useColorModeValue("gray.100", "gray.700");
@@ -30,36 +21,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Flex height="100vh" alignItems="center" justifyContent="center">
-          <Tabs
-            width={"100vw"}
-            variant="enclosed"
-            colorScheme="teal"
-            align="center"
-            defaultIndex={1}
-          >
-            <TabList>
-              <Tab>Validate a message</Tab>
-              <Tab>Verify a message</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <ValidateTab
-                  formBackground={formBackground}
-                  toggleTheme={toggleColorMode}
-                  theme={colorMode}
-                />
-              </TabPanel>
-              <TabPanel>
-                <VerifyTab
-                  formBackground={formBackground}
-                  toggleTheme={toggleColorMode}
-                  theme={colorMode}
-                />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Flex>
+        <>
+          <NavBar toggleTheme={toggleColorMode} theme={colorMode} />
+          <TabsView formBackground={formBackground} theme={colorMode} />
+        </>
       </main>
     </>
   );

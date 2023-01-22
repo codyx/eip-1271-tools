@@ -4,12 +4,14 @@ import {
   Heading,
   Button,
   Input,
+  Text,
   Textarea,
   FormControl,
   FormLabel,
   FormErrorMessage,
+  Link,
 } from "@chakra-ui/react";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import { utils } from "ethers";
 import { verifyMessage, VerifyResponse } from "@/utils/verify-message";
@@ -17,13 +19,11 @@ import { VerifyFeedback } from "./VerifyFeedack";
 
 interface Props {
   formBackground: string;
-  toggleTheme: () => void;
   theme: string | null;
 }
 
 export const VerifyTab: React.FC<Props> = ({
   formBackground,
-  toggleTheme,
   theme,
 }: Props) => {
   const [verifyResponse, setVerifyResponse] = useState<VerifyResponse>({
@@ -49,10 +49,26 @@ export const VerifyTab: React.FC<Props> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex direction="column" background={formBackground} p={12} rounded={6}>
+      <Flex
+        direction="column"
+        background={formBackground}
+        p={12}
+        rounded={6}
+        height="70%"
+      >
         <FormControl isInvalid={!!errors.signerAddress || !!errors.message}>
           <VerifyFeedback verifyResponse={verifyResponse} />
-          <Heading mb={6}>Verify an EIP-1271 message</Heading>
+          <Heading mb={6}>
+            Verify an {""}
+            <Link
+              href="https://eips.ethereum.org/EIPS/eip-1271"
+              color={theme === "dark" ? "purple.100" : "purple.300"}
+              isExternal
+            >
+              EIP-1271 <ExternalLinkIcon mx="1px" />
+            </Link>
+            {""} signature
+          </Heading>
           <FormLabel htmlFor="signerAddress">
             The signer address, i.e. a contract implementing EIP-1271
           </FormLabel>
@@ -68,7 +84,7 @@ export const VerifyTab: React.FC<Props> = ({
             })}
           />
           <FormErrorMessage>
-            {errors?.signerAddress ? "Invalid address" : ""}
+            <Text mb={3}>{errors?.signerAddress ? "Invalid address" : ""}</Text>
           </FormErrorMessage>
           <FormLabel htmlFor="message">The message to verify</FormLabel>
           <Textarea
@@ -81,18 +97,20 @@ export const VerifyTab: React.FC<Props> = ({
             })}
           />
           <FormErrorMessage>
-            {errors?.message ? "The message cannot be empty" : ""}
+            <Text mb={3}>
+              {errors?.message ? "The message cannot be empty" : ""}
+            </Text>
           </FormErrorMessage>
         </FormControl>
         <Button
           colorScheme="teal"
           isLoading={isSubmitting}
           onClick={handleSubmit(onSubmit)}
+          borderRadius={42}
+          height={30}
+          isDisabled={!!errors.signerAddress || !!errors.message}
         >
           Verify
-        </Button>
-        <Button onClick={toggleTheme}>
-          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
         </Button>
       </Flex>
     </form>
