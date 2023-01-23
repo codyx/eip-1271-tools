@@ -36,7 +36,7 @@ export default function Home() {
       </main>
       <footer>
         <Box display="flex" alignItems="center" width="100vw">
-          <Link href="https://github.com" isExternal>
+          <Link href="https://github.com/codyx/eip-1271-tools" isExternal>
             <Center w="100vw">
               <BsGithub size="20" />
             </Center>
