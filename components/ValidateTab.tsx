@@ -5,7 +5,7 @@ import { SignMessage } from "./SignMessage";
 
 interface Props {
   formBackground: string;
-  theme: string;
+  theme: string | null;
 }
 
 export const ValidateTab: React.FC<Props> = ({ formBackground, theme }) => {
