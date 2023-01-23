@@ -22,10 +22,7 @@ interface Props {
   theme: string | null;
 }
 
-export const VerifyTab: React.FC<Props> = ({
-  formBackground,
-  theme,
-}: Props) => {
+export const VerifyTab: React.FC<Props> = ({ formBackground, theme }) => {
   const [verifyResponse, setVerifyResponse] = useState<VerifyResponse>({
     valid: false,
     error: false,
@@ -73,13 +70,14 @@ export const VerifyTab: React.FC<Props> = ({
             The signer address, i.e. a contract implementing EIP-1271
           </FormLabel>
           <Input
+            autoFocus
             placeholder="0x..."
             variant="filled"
             mb={3}
             type="text"
             id="signerAddress"
             {...register("signerAddress", {
-              required: "The should be a valid address",
+              required: "This should be a valid address",
               validate: (signerAddress) => utils.isAddress(signerAddress),
             })}
           />

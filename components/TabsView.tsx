@@ -6,9 +6,12 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Text,
 } from "@chakra-ui/react";
 import { ValidateTab } from "./ValidateTab";
 import { VerifyTab } from "./VerifyTab";
+import { config } from "@/pages/_app";
+import { useEthers } from "@usedapp/core";
 
 interface Props {
   formBackground: string;
@@ -16,6 +19,15 @@ interface Props {
 }
 
 export const TabsView: React.FC<Props> = ({ formBackground, theme }: Props) => {
+  const { chainId } = useEthers();
+
+  if (!config.readOnlyUrls![chainId!]) {
+    return (
+      <Text align="center" mt={6}>
+        Please use Ethereum Mainnet.
+      </Text>
+    );
+  }
   return (
     <Flex height="100%" alignItems="center" justifyContent="center" mt={3}>
       <Tabs

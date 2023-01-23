@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import WalletConnectProvider from "@walletconnect/web3-provider/dist/umd/index.min.js";
 import { useEthers } from "@usedapp/core";
 import {
@@ -29,27 +29,51 @@ interface Props {
 export const NavBar: React.FC<Props> = ({ toggleTheme, theme }: Props) => {
   const { account, activate, deactivate, chainId } = useEthers();
 
-  // if (!config.readOnlyUrls[chainId]) {
-  //   return <p>Please use either Mainnet or Goerli testnet.</p>;
-  // }
+  async function injectWallet() {
+    const WCPProvider = new WalletConnectProvider({
+      infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+    });
+    await WCPProvider.enable();
+    await activate(WCPProvider);
+  }
 
   async function onConnect() {
     try {
-      const provider = new WalletConnectProvider({
-        infuraId: "d8df2cb7844e4a54ab0a782f608749dd",
-      });
-      await provider.enable();
-      await activate(provider);
+      await injectWallet();
     } catch (error) {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    // Try reconnecting automatically.
+    if (
+      typeof window !== "undefined" &&
+      window?.localStorage.hasOwnProperty("walletconnect")
+    ) {
+      const { connected } = JSON.parse(
+        window.localStorage.getItem("walletconnect")!
+      );
+      if (connected) injectWallet();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const ConnectButton = () => (
     <Button onClick={onConnect} colorScheme="teal" isActive>
       Connect Wallet
     </Button>
   );
+
+  const onDisconnect = () => {
+    if (
+      typeof window !== "undefined" &&
+      window.localStorage.hasOwnProperty("walletconnect")
+    ) {
+      window.localStorage.removeItem("walletconnect");
+    }
+    deactivate();
+  };
 
   const viewOnEtherscan = () => {
     if (typeof window === undefined || !account) return;
@@ -77,7 +101,7 @@ export const NavBar: React.FC<Props> = ({ toggleTheme, theme }: Props) => {
               .toUpperCase()}`}
           </MenuButton>
           <MenuList>
-            <MenuItem onClick={deactivate}>Disconnect</MenuItem>
+            <MenuItem onClick={onDisconnect}>Disconnect</MenuItem>
           </MenuList>
         </Menu>
       ) : (
