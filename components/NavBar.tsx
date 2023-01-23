@@ -14,12 +14,8 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import {
-  SunIcon,
-  MoonIcon,
-  ChevronDownIcon,
-  ExternalLinkIcon,
-} from "@chakra-ui/icons";
+import { SunIcon, MoonIcon, ChevronDownIcon, CopyIcon } from "@chakra-ui/icons";
+import { useToast } from "@chakra-ui/react";
 
 interface Props {
   toggleTheme: () => void;
@@ -27,7 +23,7 @@ interface Props {
 }
 
 export const NavBar: React.FC<Props> = ({ toggleTheme, theme }: Props) => {
-  const { account, activate, deactivate, chainId } = useEthers();
+  const { account, activate, deactivate } = useEthers();
 
   async function injectWallet() {
     const WCPProvider = new WalletConnectProvider({
@@ -75,13 +71,16 @@ export const NavBar: React.FC<Props> = ({ toggleTheme, theme }: Props) => {
     deactivate();
   };
 
-  const viewOnEtherscan = () => {
+  const toast = useToast();
+
+  const copyToClipboard = () => {
     if (typeof window === undefined || !account) return;
-    window.open(
-      `https://etherscan.io/address/${account}`,
-      "_blank",
-      "noreferrer"
-    );
+    navigator.clipboard.writeText(account);
+    toast({
+      title: "Copied!",
+      status: "info",
+      isClosable: true,
+    });
   };
 
   const WalletConnectConnect = () => (
@@ -94,7 +93,7 @@ export const NavBar: React.FC<Props> = ({ toggleTheme, theme }: Props) => {
           <MenuButton
             as={Button}
             rightIcon={<ChevronDownIcon />}
-            leftIcon={<ExternalLinkIcon onClick={viewOnEtherscan} />}
+            leftIcon={<CopyIcon onClick={copyToClipboard} />}
           >
             {`0x${account.slice(2, 6).toUpperCase()}...${account
               .slice(-4)
