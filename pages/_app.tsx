@@ -1,8 +1,9 @@
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 
-import { Mainnet, Config, DAppProvider, Goerli } from "@usedapp/core";
+import { Mainnet, Config, DAppProvider } from "@usedapp/core";
 import { providers } from "ethers";
+import { Analytics } from "@vercel/analytics/react";
 
 if (!process.env.NEXT_PUBLIC_MAINNET_PROVIDER)
   throw new Error("NEXT_PUBLIC_MAINNET_PROVIDER env variable is not set");
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <DAppProvider config={useDappConfig}>
       <ChakraProvider>
         <Component {...pageProps} />
+        <Analytics />
       </ChakraProvider>
     </DAppProvider>
   );
