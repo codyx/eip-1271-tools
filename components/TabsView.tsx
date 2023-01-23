@@ -10,8 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { ValidateTab } from "./ValidateTab";
 import { VerifyTab } from "./VerifyTab";
-import { config } from "@/pages/_app";
+import { useDappConfig } from "@/pages/_app";
 import { useEthers } from "@usedapp/core";
+import { FAQ } from "./FAQ";
 
 interface Props {
   formBackground: string;
@@ -21,7 +22,7 @@ interface Props {
 export const TabsView: React.FC<Props> = ({ formBackground, theme }: Props) => {
   const { chainId } = useEthers();
 
-  if (!config.readOnlyUrls![chainId!]) {
+  if (!useDappConfig.readOnlyUrls![chainId!]) {
     return (
       <Text align="center" mt={6}>
         Please use Ethereum Mainnet.
@@ -40,6 +41,7 @@ export const TabsView: React.FC<Props> = ({ formBackground, theme }: Props) => {
         <TabList>
           <Tab>Validate a message</Tab>
           <Tab>Verify a message</Tab>
+          <Tab>FAQ</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -47,6 +49,9 @@ export const TabsView: React.FC<Props> = ({ formBackground, theme }: Props) => {
           </TabPanel>
           <TabPanel>
             <VerifyTab formBackground={formBackground} theme={theme} />
+          </TabPanel>
+          <TabPanel>
+            <FAQ formBackground={formBackground} theme={theme} />
           </TabPanel>
         </TabPanels>
       </Tabs>

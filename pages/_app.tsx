@@ -14,7 +14,7 @@ export const MainnetProvider = new providers.JsonRpcProvider(
   process.env.NEXT_PUBLIC_MAINNET_PROVIDER
 );
 
-export const config: Config = {
+export const useDappConfig: Config = {
   readOnlyChainId: Mainnet.chainId,
   readOnlyUrls: {
     [Mainnet.chainId]: MainnetProvider,
@@ -23,7 +23,7 @@ export const config: Config = {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <DAppProvider config={config}>
+    <DAppProvider config={useDappConfig}>
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
