@@ -39,6 +39,7 @@ export const SignMessage: React.FC<Props> = ({ formBackground }) => {
       const WCPProvider = new WalletConnectProvider({
         infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
       });
+      await WCPProvider.enable();
       const sig = await WCPProvider.send("personal_sign", [
         values.message,
         account.toLowerCase(),

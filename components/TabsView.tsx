@@ -22,7 +22,7 @@ interface Props {
 export const TabsView: React.FC<Props> = ({ formBackground, theme }: Props) => {
   const { chainId } = useEthers();
 
-  if (!useDappConfig.readOnlyUrls![chainId!]) {
+  if (chainId && !useDappConfig.readOnlyUrls![chainId!]) {
     return (
       <Text align="center" mt={6}>
         Please use Ethereum Mainnet.
