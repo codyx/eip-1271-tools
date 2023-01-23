@@ -16,7 +16,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 interface Props {
   formBackground: string;
-  theme: string;
+  theme: string | null;
 }
 
 export const SignMessage: React.FC<Props> = ({ formBackground }) => {
